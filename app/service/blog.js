@@ -1,15 +1,20 @@
 'use strict'
 
 const Service = require('egg').Service
-
+const {
+  ERROR,
+  SUCCESS
+} = require('../util/util')
 class BlogService extends Service {
   async create(blog) {
     try {
       const res = await this.ctx.model.Blog.create(blog)
-      return res
+      return Object.assign({
+        data: res
+      }, SUCCESS)
     } catch (error) {
       this.logger.error(error)
-      return {}
+      return ERROR
     }
   }
 
@@ -35,7 +40,7 @@ class BlogService extends Service {
         }
       }
     }
-    return this.ctx.model.Blog.findAndCountAll({
+    const res = await this.ctx.model.Blog.findAndCountAll({
       options,
       include: [{
         model: this.ctx.model.User,
@@ -47,6 +52,21 @@ class BlogService extends Service {
         }]
       }]
     })
+    return Object.assign({
+      data: res
+    }, SUCCESS)
+  }
+
+  async del(id) {
+    const blog = await this.ctx.model.Blog.findById(id)
+    if (!blog) {
+      return Object.assign({
+        error_msg: 'blog not found'
+      }, ERROR)
+    } else {
+      blog.destroy()
+      return SUCCESS
+    }
   }
 }
 

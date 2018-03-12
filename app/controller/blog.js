@@ -1,10 +1,6 @@
 'use strict'
 
 const Controller = require('egg').Controller
-const {
-  ERROR,
-  SUCCESS
-} = require('../util/util')
 
 class BlogController extends Controller {
   async create() {
@@ -14,14 +10,9 @@ class BlogController extends Controller {
     const body = ctx.request.body
     body.user_id = 1
     const created = await ctx.service.blog.create(ctx.request.body)
-    if (created) {
-      ctx.status = 201
-      ctx.body = Object.assign({
-        data: created
-      }, SUCCESS)
-    } else {
-      ctx.body = Object.assign({}, ERROR)
-    }
+    ctx.status = 201
+    ctx.body = created
+    
   }
 
   async index() {
@@ -29,9 +20,17 @@ class BlogController extends Controller {
       ctx
     } = this
     const res = await ctx.service.blog.index(ctx.query)
-    ctx.body = Object.assign({
-      data: res
-    }, SUCCESS)
+    ctx.body = res
+  }
+
+  async destroy() {
+    const {
+      ctx
+    } = this
+    const id = ctx.params.id
+    const res = await ctx.service.blog.del(id)
+    ctx.status = 200
+    ctx.body = res
   }
 }
 
