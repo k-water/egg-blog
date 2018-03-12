@@ -25,7 +25,9 @@ class BlogService extends Service {
     order = 'DESC',
     tags = ''
   }) {
-    const { Op } = this.app.Sequelize
+    const {
+      Op
+    } = this.app.Sequelize
     const options = {
       offset: parseInt(offset),
       limit,
@@ -33,7 +35,7 @@ class BlogService extends Service {
         [order_by, order.toUpperCase()]
       ]
     }
-    if(tags) {
+    if (tags) {
       options.where = {
         tags: {
           [Op.like]: `%${tags}%`
@@ -57,14 +59,41 @@ class BlogService extends Service {
     }, SUCCESS)
   }
 
-  async del(id) {
+  async del({
+    id,
+    user_id
+  }) {
     const blog = await this.ctx.model.Blog.findById(id)
     if (!blog) {
       return Object.assign({
         error_msg: 'blog not found'
       }, ERROR)
+    } else if (blog.user_id !== user_id) {
+      return Object.assign({
+        error_msg: 'not allowed to modify delete blog'
+      }, ERROR)
     } else {
       blog.destroy()
+      return SUCCESS
+    }
+  }
+
+  async update({
+    id,
+    user_id,
+    updates
+  }) {
+    const blog = await this.ctx.model.Blog.findById(id)
+    if (!blog) {
+      return Object.assign({
+        error_msg: 'blog not found'
+      }, ERROR)
+    } else if (blog.user_id !== user_id) {
+      return Object.assign({
+        error_msg: 'not allowed to modify others blog'
+      }, ERROR)
+    } else {
+      blog.update(updates)
       return SUCCESS
     }
   }

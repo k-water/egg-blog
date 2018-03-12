@@ -28,9 +28,27 @@ class BlogController extends Controller {
       ctx
     } = this
     const id = ctx.params.id
-    const res = await ctx.service.blog.del(id)
+    const user_id = +ctx.params.user_id
+    const res = await ctx.service.blog.del({
+      id,
+      user_id
+    })
     ctx.status = 200
     ctx.body = res
+  }
+
+  async update() {
+    const {
+      ctx
+    } = this
+    const id = ctx.params.id
+    const user_id = +ctx.params.user_id
+    const body = ctx.request.body
+    ctx.body = await ctx.service.blog.update({
+      id,
+      user_id,
+      updates: body
+    })
   }
 }
 

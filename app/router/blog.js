@@ -1,6 +1,8 @@
 'use strict'
 
 module.exports = app => {
-  const { router } = app
-  router.resources('blogs', '/api/blog', 'blog')
+  app.get('/api/blog', 'blog.index')
+  app.post('/api/blog', 'blog.create')
+  app.del('/api/users/:user_id/blog/:id', 'blog.destroy')
+  app.put('/api/users/:user_id/blog/:id', 'blog.update')
 }
