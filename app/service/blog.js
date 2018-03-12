@@ -21,17 +21,22 @@ class BlogService extends Service {
     tags = ''
   }) {
     const { Op } = this.app.Sequelize
-    return this.ctx.model.Blog.findAndCountAll({
+    const options = {
       offset: parseInt(offset),
       limit,
       order: [
         [order_by, order.toUpperCase()]
-      ],
-      where: {
+      ]
+    }
+    if(tags) {
+      options.where = {
         tags: {
           [Op.like]: `%${tags}%`
         }
-      },
+      }
+    }
+    return this.ctx.model.Blog.findAndCountAll({
+      options,
       include: [{
         model: this.ctx.model.User,
         as: 'user',
@@ -42,7 +47,6 @@ class BlogService extends Service {
         }]
       }]
     })
-
   }
 }
 
