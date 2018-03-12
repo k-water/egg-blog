@@ -29,19 +29,17 @@ module.exports = app => {
     }
   })
 
-  User.prototype.associate = function() {
+  User.associate = function() {
     app.model.User.hasMany(app.model.Blog, {
-      as: 'blogs',
-      foreignKey: 'fk_blog'
+      as: 'blogs'
     })
     app.model.User.hasMany(app.model.Catalog, {
-      as: 'catalogs',
-      foreignKey: 'fk_catalog'
+      as: 'catalogs'
     })
     app.model.User.hasMany(app.model.Comment, {
-      as: 'comments',
-      foreignKey: 'fk_comment'
+      as: 'comments'
     })
+    app.model.User.hasOne(app.model.Authority)
   }
 
   return User
