@@ -50,6 +50,14 @@ class BlogController extends Controller {
       updates: body
     })
   }
+
+  async find() {
+    const {
+      ctx
+    } = this
+    const id = ctx.params.id
+    ctx.body = await ctx.service.blog.find(id)
+  }
 }
 
 module.exports = BlogController

@@ -97,6 +97,32 @@ class BlogService extends Service {
       return SUCCESS
     }
   }
+
+  async find(id) {
+    const blog = await this.ctx.model.Blog.findById(id, {
+      include: [{
+        model: this.ctx.model.User,
+        as: 'user',
+        attributes: ['id', 'username'],
+        include: [{
+          model: this.ctx.model.Authority,
+          attributes: ['id', 'name']
+        }]
+      }]
+    })
+    blog.increment('readSize').then(res => {}).catch(err => {
+      console.log(err)
+    })
+    if (!blog) {
+      return Object.assign({
+        error_msg: 'blog not found'
+      }, ERROR)
+    } else {
+      return Object.assign({
+        data: blog
+      }, SUCCESS)
+    }
+  }
 }
 
 module.exports = BlogService

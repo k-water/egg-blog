@@ -33,7 +33,13 @@ module.exports = app => {
     },
     readSize: {
       type: INTEGER,
-      defaultValue: 0
+      defaultValue: 0,
+      get() {
+        return this.getDataValue('readSize')
+      },
+      set(val) {
+        this.setDataValue('readSize', val+1)
+      }
     },
     commentSize: {
       type: INTEGER,
