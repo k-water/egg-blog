@@ -9,6 +9,14 @@ class UserController extends Controller {
     } = this
     ctx.body = await ctx.service.user.create(ctx.request.body)
   }
+
+  async destroy() {
+    const {
+      ctx
+    } = this
+    const id = +ctx.params.id
+    ctx.body = await ctx.service.user.del(id)
+  }
 }
 
 module.exports = UserController
