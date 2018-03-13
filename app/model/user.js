@@ -14,18 +14,10 @@ module.exports = app => {
       autoIncrement: true,
     },
     username: {
-      type: STRING,
-      validate: {
-        min: 2,
-        max: 20
-      }
+      type: STRING
     },
     password: {
-      type: STRING,
-      validate: {
-        min: 6,
-        max: 50
-      }
+      type: STRING
     }
   })
 

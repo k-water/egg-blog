@@ -4,6 +4,7 @@
   "description": "",
   "private": true,
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "egg": "^2.2.1",
     "egg-scripts": "^2.5.0",
     "egg-sequelize": "^3.1.2",
