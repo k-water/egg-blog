@@ -67,7 +67,35 @@ class UserService extends Service {
     } catch (error) {
       ctx.throw(500)
     }
-    
+  }
+
+  async update({ id, user }) {
+    const {
+      ctx
+    } = this
+    try {
+      const userDB = await ctx.model.User.findById(id)
+      if (!userDB) {
+        ctx.status = 400
+        return Object.assign(ERROR, {
+          msg: 'user not found'
+        })
+      } else {
+        const saltRounds = 10
+        const salt = bcrypt.genSaltSync(saltRounds)
+        const hash = bcrypt.hashSync(user.password, salt)
+        user = Object.assign(user, {
+          password: hash
+        })
+        const res = await userDB.update(user)
+        ctx.status = 200
+        return Object.assign(SUCCESS, {
+          data: res
+        })
+      }
+    } catch (error) {
+      ctx.throw(500)
+    }
   }
 }
 

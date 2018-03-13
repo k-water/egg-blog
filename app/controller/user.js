@@ -17,6 +17,18 @@ class UserController extends Controller {
     const id = +ctx.params.id
     ctx.body = await ctx.service.user.del(id)
   }
+
+  async update() {
+    const {
+      ctx
+    } = this
+    const id = +ctx.params.id
+    const user = ctx.request.body
+    ctx.body = await ctx.service.user.update({
+      id,
+      user
+    })
+  }
 }
 
 module.exports = UserController
