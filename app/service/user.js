@@ -97,6 +97,38 @@ class UserService extends Service {
       ctx.throw(500)
     }
   }
+
+  async login({ username, password }) {
+    const {
+      ctx
+    } = this
+    try {
+      const user = await ctx.model.User.findOne({
+        where: {
+          username,
+        }
+      })
+      if (!user) {
+        ctx.status = 401
+        return Object.assign(ERROR, {
+          msg: 'username is error'
+        })
+      }
+      if (await bcrypt.compare(password, user.password)) {
+        ctx.status = 200
+        return Object.assign(SUCCESS, {
+          data: user
+        })
+      } else {
+        ctx.status = 401
+        return Object.assign(ERROR, {
+          msg: 'password is error'
+        })
+      }
+    } catch (error) {
+      throw(500)
+    }
+  }
 }
 
 module.exports = UserService

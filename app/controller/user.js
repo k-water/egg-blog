@@ -29,6 +29,20 @@ class UserController extends Controller {
       user
     })
   }
+
+  async login() {
+    const {
+      ctx
+    } = this
+    const {
+      username,
+      password
+    } = ctx.request.body
+    ctx.body = await ctx.service.user.login({
+      username,
+      password
+    })
+  }
 }
 
 module.exports = UserController
