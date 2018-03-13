@@ -22,7 +22,7 @@ module.exports = app => {
   })
 
   Authority.associate = function() {
-    app.model.Authority.belongsTo(app.model.User)
+    app.model.Authority.hasMany(app.model.User)
   }
 
 

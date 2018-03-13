@@ -43,6 +43,14 @@ class UserController extends Controller {
       password
     })
   }
+
+  async find() {
+    const {
+      ctx
+    } = this
+    const id = +ctx.params.id
+    ctx.body = await ctx.service.user.find(id)
+  }
 }
 
 module.exports = UserController

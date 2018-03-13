@@ -129,6 +129,33 @@ class UserService extends Service {
       throw(500)
     }
   }
+
+  async find(id) {
+    const {
+      ctx
+    } = this
+    try {
+      const user = await ctx.model.User.findById(id, {
+        include: [{
+          model: ctx.model.Authority,
+          attributes: ['id', 'name']
+        }]
+      })
+      if (!user) {
+        ctx.status = 401
+        return Object.assign(ERROR, {
+          msg: 'user not found'
+        })
+      } else {
+        ctx.status = 200
+        return Object.assign(SUCCESS, {
+          data: user
+        })
+      }
+    } catch (error) {
+      throw(500)
+    }
+  }
 }
 
 module.exports = UserService

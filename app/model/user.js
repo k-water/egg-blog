@@ -31,7 +31,7 @@ module.exports = app => {
     app.model.User.hasMany(app.model.Comment, {
       as: 'comments'
     })
-    app.model.User.hasOne(app.model.Authority)
+    app.model.User.belongsTo(app.model.Authority)
   }
 
   return User
