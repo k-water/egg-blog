@@ -58,6 +58,14 @@ class BlogController extends Controller {
     const id = ctx.params.id
     ctx.body = await ctx.service.blog.find(id)
   }
+
+  async edit() {
+    const {
+      ctx
+    } = this
+    const id = ctx.params.id
+    ctx.body = await ctx.service.blog.edit(id)
+  }
 }
 
 module.exports = BlogController

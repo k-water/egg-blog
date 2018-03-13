@@ -54,9 +54,9 @@ class BlogService extends Service {
         }]
       }]
     })
-    return Object.assign({
+    return Object.assign(SUCCESS, {
       data: res
-    }, SUCCESS)
+    })
   }
 
   async del({
@@ -69,9 +69,9 @@ class BlogService extends Service {
         error_msg: 'blog not found'
       }, ERROR)
     } else if (blog.user_id !== user_id) {
-      return Object.assign({
-        error_msg: 'not allowed to modify delete blog'
-      }, ERROR)
+      return Object.assign(ERROR, {
+        msg: 'not allowed to delete others blog'
+      })
     } else {
       blog.destroy()
       return SUCCESS
@@ -85,13 +85,13 @@ class BlogService extends Service {
   }) {
     const blog = await this.ctx.model.Blog.findById(id)
     if (!blog) {
-      return Object.assign({
-        error_msg: 'blog not found'
-      }, ERROR)
+      return Object.assign(ERROR, {
+        msg: 'blog not found'
+      })
     } else if (blog.user_id !== user_id) {
-      return Object.assign({
-        error_msg: 'not allowed to modify others blog'
-      }, ERROR)
+      return Object.assign(ERROR, {
+        msg: 'not allowed to modify others blog'
+      })
     } else {
       blog.update(updates)
       return SUCCESS
@@ -114,13 +114,36 @@ class BlogService extends Service {
       console.log(err)
     })
     if (!blog) {
-      return Object.assign({
-        error_msg: 'blog not found'
-      }, ERROR)
+      return Object.assign(ERROR, {
+        msg: 'blog not found'
+      })
     } else {
-      return Object.assign({
+      return Object.assign(SUCCESS, {
         data: blog
-      }, SUCCESS)
+      })
+    }
+  }
+
+  async edit(id) {
+    const blog = await this.ctx.model.Blog.findById(id, {
+      include: [{
+        model: this.ctx.model.User,
+        as: 'user',
+        attributes: ['id', 'username'],
+        include: [{
+          model: this.ctx.model.Authority,
+          attributes: ['id', 'name']
+        }]
+      }]
+    })
+    if (!blog) {
+      return Object.assign(ERROR, {
+        msg: 'blog not found'
+      })
+    } else {
+      return Object.assign(SUCCESS, {
+        data: blog
+      })
     }
   }
 }

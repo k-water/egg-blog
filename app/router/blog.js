@@ -6,4 +6,5 @@ module.exports = app => {
   app.del('/api/users/:user_id/blog/:id', 'blog.destroy')
   app.put('/api/users/:user_id/blog/:id', 'blog.update')
   app.get('/api/blog/:id', 'blog.find')
+  app.get('/api/blog/:id/edit', 'blog.edit')
 }
