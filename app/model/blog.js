@@ -33,13 +33,7 @@ module.exports = app => {
     },
     readSize: {
       type: INTEGER,
-      defaultValue: 0,
-      get() {
-        return this.getDataValue('readSize')
-      },
-      set(val) {
-        this.setDataValue('readSize', val+1)
-      }
+      defaultValue: 0
     },
     commentSize: {
       type: INTEGER,
@@ -56,8 +50,8 @@ module.exports = app => {
   Blog.associate = function () {
     app.model.Blog.belongsTo(app.model.User)
     app.model.Blog.belongsTo(app.model.Catalog)
-    app.model.Blog.belongsToMany(app.model.Comment, {
-      through: 'Blog_Comment'
+    app.model.Blog.hasMany(app.model.Comment, {
+      as: 'comment'
     })
   }
   return Blog

@@ -42,6 +42,7 @@ class UserService extends Service {
         })
       }
     } catch (error) {
+      throw(error)
       ctx.throw(500)
     }
   }

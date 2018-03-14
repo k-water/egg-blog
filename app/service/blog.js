@@ -13,7 +13,7 @@ class BlogService extends Service {
         data: res
       }, SUCCESS)
     } catch (error) {
-      this.logger.error(error)
+      throw(error)
       return ERROR
     }
   }
@@ -42,8 +42,7 @@ class BlogService extends Service {
         }
       }
     }
-    const res = await this.ctx.model.Blog.findAndCountAll({
-      options,
+    const res = await this.ctx.model.Blog.findAndCountAll(Object.assign(options, {
       include: [{
         model: this.ctx.model.User,
         as: 'user',
@@ -52,8 +51,11 @@ class BlogService extends Service {
           model: this.ctx.model.Authority,
           attributes: ['id', 'name']
         }]
+      }, {
+        model: this.ctx.model.Comment,
+        as: 'comment'
       }]
-    })
+    }))
     return Object.assign(SUCCESS, {
       data: res
     })

@@ -27,9 +27,7 @@ module.exports = app => {
 
   Comment.associate = function () {
     app.model.Comment.belongsTo(app.model.User)
-    app.model.Comment.belongsToMany(app.model.Blog, {
-      through: 'Blog_Comment'
-    })
+    app.model.Comment.belongsTo(app.model.Blog)
   }
 
   return Comment
