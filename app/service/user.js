@@ -117,8 +117,15 @@ class UserService extends Service {
       }
       if (await bcrypt.compare(password, user.password)) {
         ctx.status = 200
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(user.password, salt)
+        ctx.cookies.set('auth', hash, {
+          maxAge: 3600
+        })
         return Object.assign(SUCCESS, {
-          data: user
+          data: Object.assign(user, {
+            password: ''
+          })
         })
       } else {
         ctx.status = 401
@@ -127,7 +134,7 @@ class UserService extends Service {
         })
       }
     } catch (error) {
-      throw(500)
+      throw(error)
     }
   }
 
