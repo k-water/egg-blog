@@ -39,8 +39,8 @@ class CommentService extends Service {
           data: res
         })
       }
-    } catch(error) {
-      throw(error)
+    } catch (error) {
+      throw (error)
       ctx.throw(500)
     }
   }
@@ -61,13 +61,17 @@ class CommentService extends Service {
           msg: 'comment is not exists'
         })
       }
-      if (comment.user_id !== user_id || user.authority_id !== 1) {
+      if (comment.user_id !== user_id && user.authority_id !== 1) {
         ctx.status = 403
         return Object.assign(ERROR, {
           msg: 'you can not delete others comment'
         })
       } else {
+        const blog = await ctx.model.Blog.findById(comment.blog_id)
         const res = await comment.destroy()
+        blog.decrement('commentSize').then(res => {}).catch(err => {
+          console.log(err)
+        })
         ctx.status = 200
         return Object.assign(SUCCESS, {
           data: res
@@ -75,7 +79,7 @@ class CommentService extends Service {
       }
     } catch (error) {
       ctx.status = 500
-      throw(error)
+      throw (error)
     }
   }
 }
