@@ -3,7 +3,8 @@
 const Service = require('egg').Service
 const {
   ERROR,
-  SUCCESS
+  SUCCESS,
+  unique
 } = require('../util/util')
 class BlogService extends Service {
   async create(blog) {
@@ -150,6 +151,28 @@ class BlogService extends Service {
       return Object.assign(SUCCESS, {
         data: blog
       })
+    }
+  }
+
+  async getTags() {
+    const {
+      ctx
+    } = this
+    try {
+      const res = await ctx.model.Blog.findAndCountAll({
+        attributes: ['tags']
+      })
+      let arrTag = new Array()
+      res.rows.map((item) => {
+       return arrTag.push(item['tags'])
+      })
+      const tags = unique(arrTag.join(',').split(','))
+      return Object.assign(SUCCESS, {
+        tags
+      })
+    } catch (error) {
+      ctx.status = 500
+      throw(500)
     }
   }
 }

@@ -1,7 +1,10 @@
 'use strict'
 
 const Controller = require('egg').Controller
-
+const {
+  unique,
+  SUCCESS
+} = require('../util/util')
 class BlogController extends Controller {
   async create() {
     const {
@@ -65,6 +68,13 @@ class BlogController extends Controller {
     } = this
     const id = ctx.params.id
     ctx.body = await ctx.service.blog.edit(id)
+  }
+
+  async tags() {
+    const {
+      ctx
+    } = this
+    ctx.body = await ctx.service.blog.getTags()
   }
  }
 
