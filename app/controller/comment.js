@@ -18,6 +18,18 @@ class CommentController extends Controller {
       content
     })
   }
+
+  async destroy() {
+    const {
+      ctx
+    } = this
+    const id = +ctx.params.id
+    const user_id = +ctx.params.user_id
+    ctx.body = await ctx.service.comment.del({
+      id,
+      user_id
+    })
+  }
 }
 
 module.exports = CommentController

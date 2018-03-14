@@ -110,8 +110,12 @@ class BlogService extends Service {
           model: this.ctx.model.Authority,
           attributes: ['id', 'name']
         }]
+      }, {
+        model: this.ctx.model.Comment,
+        as: 'comment'
       }]
     })
+    blog.set('readSize', blog.get('readSize') + 1)
     blog.increment('readSize').then(res => {}).catch(err => {
       console.log(err)
     })
