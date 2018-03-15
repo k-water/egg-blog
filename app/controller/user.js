@@ -1,56 +1,56 @@
-'use strict'
+'use strict';
 
-const Controller = require('egg').Controller
+const Controller = require('egg').Controller;
 
 class UserController extends Controller {
   async create() {
     const {
-      ctx
-    } = this
-    ctx.body = await ctx.service.user.create(ctx.request.body)
+      ctx,
+    } = this;
+    ctx.body = await ctx.service.user.create(ctx.request.body);
   }
 
   async destroy() {
     const {
-      ctx
-    } = this
-    const id = +ctx.params.id
-    ctx.body = await ctx.service.user.del(id)
+      ctx,
+    } = this;
+    const id = +ctx.params.id;
+    ctx.body = await ctx.service.user.del(id);
   }
 
   async update() {
     const {
-      ctx
-    } = this
-    const id = +ctx.params.id
-    const user = ctx.request.body
+      ctx,
+    } = this;
+    const id = +ctx.params.id;
+    const user = ctx.request.body;
     ctx.body = await ctx.service.user.update({
       id,
-      user
-    })
+      user,
+    });
   }
 
   async login() {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     const {
       username,
-      password
-    } = ctx.request.body
+      password,
+    } = ctx.request.body;
     ctx.body = await ctx.service.user.login({
       username,
-      password
-    })
+      password,
+    });
   }
 
   async find() {
     const {
-      ctx
-    } = this
-    const id = +ctx.params.id
-    ctx.body = await ctx.service.user.find(id)
+      ctx,
+    } = this;
+    const id = +ctx.params.id;
+    ctx.body = await ctx.service.user.find(id);
   }
 }
 
-module.exports = UserController
+module.exports = UserController;

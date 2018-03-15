@@ -1,11 +1,11 @@
-'use strict'
+'use strict';
 
 module.exports = app => {
   const {
     INTEGER,
     STRING,
-    DATE
-  } = app.Sequelize
+    DATE,
+  } = app.Sequelize;
 
   const User = app.model.define('user', {
     id: {
@@ -14,25 +14,27 @@ module.exports = app => {
       autoIncrement: true,
     },
     username: {
-      type: STRING
+      type: STRING,
     },
     password: {
-      type: STRING
-    }
-  })
+      type: STRING,
+    },
+    created_at: DATE,
+    updated_at: DATE,
+  });
 
   User.associate = function() {
     app.model.User.hasMany(app.model.Blog, {
-      as: 'blogs'
-    })
+      as: 'blogs',
+    });
     app.model.User.hasMany(app.model.Catalog, {
-      as: 'catalogs'
-    })
+      as: 'catalogs',
+    });
     app.model.User.hasMany(app.model.Comment, {
-      as: 'comments'
-    })
-    app.model.User.belongsTo(app.model.Authority)
-  }
+      as: 'comments',
+    });
+    app.model.User.belongsTo(app.model.Authority);
+  };
 
-  return User
-}
+  return User;
+};

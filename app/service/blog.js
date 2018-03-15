@@ -1,21 +1,24 @@
-'use strict'
+'use strict';
 
-const Service = require('egg').Service
+const Service = require('egg').Service;
 const {
   ERROR,
   SUCCESS,
-  unique
-} = require('../util/util')
+  unique,
+} = require('../util/util');
 class BlogService extends Service {
   async create(blog) {
+    const {
+      ctx,
+    } = this;
     try {
-      const res = await this.ctx.model.Blog.create(blog)
+      const res = await this.ctx.model.Blog.create(blog);
       return Object.assign({
-        data: res
-      }, SUCCESS)
+        data: res,
+      }, SUCCESS);
     } catch (error) {
-      throw (error)
-      return ERROR
+      ctx.status = 500;
+      throw (error);
     }
   }
 
@@ -24,81 +27,81 @@ class BlogService extends Service {
     limit = 5,
     order_by = 'created_at',
     order = 'DESC',
-    tags = ''
+    tags = '',
   }) {
     const {
-      Op
-    } = this.app.Sequelize
+      Op,
+    } = this.app.Sequelize;
     const options = {
       offset: parseInt(offset),
       limit,
       order: [
-        [order_by, order.toUpperCase()]
-      ]
-    }
+        [ order_by, order.toUpperCase() ],
+      ],
+    };
     if (tags) {
       options.where = {
         tags: {
-          [Op.like]: `%${tags}%`
-        }
-      }
+          [Op.like]: `%${tags}%`,
+        },
+      };
     }
     const res = await this.ctx.model.Blog.findAndCountAll(Object.assign(options, {
       include: [{
         model: this.ctx.model.User,
         as: 'user',
-        attributes: ['id', 'username'],
+        attributes: [ 'id', 'username' ],
         include: [{
           model: this.ctx.model.Authority,
-          attributes: ['id', 'name']
-        }]
+          attributes: [ 'id', 'name' ],
+        }],
       }, {
         model: this.ctx.model.Catalog,
-        as: 'catalog'
-      }]
-    }))
+        as: 'catalog',
+      }],
+    }));
     return Object.assign(SUCCESS, {
-      data: res
-    })
+      data: res,
+    });
   }
 
   async del({
     id,
-    user_id
+    user_id,
   }) {
-    const blog = await this.ctx.model.Blog.findById(id)
+    const blog = await this.ctx.model.Blog.findById(id);
     if (!blog) {
       return Object.assign({
-        error_msg: 'blog not found'
-      }, ERROR)
+        error_msg: 'blog not found',
+      }, ERROR);
     } else if (blog.user_id !== user_id) {
       return Object.assign(ERROR, {
-        msg: 'not allowed to delete others blog'
-      })
-    } else {
-      blog.destroy()
-      return SUCCESS
+        msg: 'not allowed to delete others blog',
+      });
     }
+    blog.destroy();
+    return SUCCESS;
+
   }
 
   async update({
     id,
     user_id,
-    updates
+    updates,
   }) {
-    const blog = await this.ctx.model.Blog.findById(id)
+    const blog = await this.ctx.model.Blog.findById(id);
     if (!blog) {
       return Object.assign(ERROR, {
-        msg: 'blog not found'
-      })
+        msg: 'blog not found',
+      });
     } else if (blog.user_id !== user_id) {
       return Object.assign(ERROR, {
-        msg: 'not allowed to modify others blog'
-      })
-    } else {
-      blog.update(updates)
-      return SUCCESS
+        msg: 'not allowed to modify others blog',
+      });
     }
+    blog.update(updates);
+    return SUCCESS;
+
   }
 
   async find(id) {
@@ -106,42 +109,42 @@ class BlogService extends Service {
       include: [{
         model: this.ctx.model.User,
         as: 'user',
-        attributes: ['id', 'username'],
+        attributes: [ 'id', 'username' ],
         include: [{
           model: this.ctx.model.Authority,
-          attributes: ['id', 'name']
-        }]
+          attributes: [ 'id', 'name' ],
+        }],
       }, {
         model: this.ctx.model.Comment,
         as: 'comment',
-        attributes: ['id', 'content', 'created_at', 'updated_at'],
+        attributes: [ 'id', 'content', 'created_at', 'updated_at' ],
         include: [{
           model: this.ctx.model.User,
-          attributes: ['username']
-        }]
+          attributes: [ 'username' ],
+        }],
       }, {
         model: this.ctx.model.Catalog,
         as: 'catalog',
-        attributes: ['id', 'name', 'created_at', 'updated_at'],
+        attributes: [ 'id', 'name', 'created_at', 'updated_at' ],
         include: [{
           model: this.ctx.model.User,
-          attributes: ['username']
-        }]
-      }]
-    })
-    blog.set('readSize', blog.get('readSize') + 1)
-    blog.increment('readSize').then(res => {}).catch(err => {
-      console.log(err)
-    })
+          attributes: [ 'username' ],
+        }],
+      }],
+    });
+    blog.set('readSize', blog.get('readSize') + 1);
+    blog.increment('readSize').then().catch(err => {
+      console.log(err);
+    });
     if (!blog) {
       return Object.assign(ERROR, {
-        msg: 'blog not found'
-      })
-    } else {
-      return Object.assign(SUCCESS, {
-        data: blog
-      })
+        msg: 'blog not found',
+      });
     }
+    return Object.assign(SUCCESS, {
+      data: blog,
+    });
+
   }
 
   async edit(id) {
@@ -149,48 +152,48 @@ class BlogService extends Service {
       include: [{
         model: this.ctx.model.User,
         as: 'user',
-        attributes: ['id', 'username'],
+        attributes: [ 'id', 'username' ],
         include: [{
           model: this.ctx.model.Authority,
-          attributes: ['id', 'name']
-        }]
+          attributes: [ 'id', 'name' ],
+        }],
       }, {
         model: this.ctx.model.Catalog,
-        as: 'catalog'
-      }]
-    })
+        as: 'catalog',
+      }],
+    });
     if (!blog) {
       return Object.assign(ERROR, {
-        msg: 'blog not found'
-      })
-    } else {
-      return Object.assign(SUCCESS, {
-        data: blog
-      })
+        msg: 'blog not found',
+      });
     }
+    return Object.assign(SUCCESS, {
+      data: blog,
+    });
+
   }
 
   async getTags() {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
       const res = await ctx.model.Blog.findAndCountAll({
-        attributes: ['tags']
-      })
-      let arrTag = new Array()
-      res.rows.map((item) => {
-        return arrTag.push(item['tags'])
-      })
-      const tags = unique(arrTag.join(',').split(','))
+        attributes: [ 'tags' ],
+      });
+      const arrTag = [];
+      res.rows.map(item => {
+        return arrTag.push(item.tags);
+      });
+      const tags = unique(arrTag.join(',').split(','));
       return Object.assign(SUCCESS, {
-        tags
-      })
+        tags,
+      });
     } catch (error) {
-      ctx.status = 500
-      throw (500)
+      ctx.status = 500;
+      throw (500);
     }
   }
 }
 
-module.exports = BlogService
+module.exports = BlogService;

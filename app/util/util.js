@@ -1,16 +1,16 @@
-'use strict'
+'use strict';
 module.exports = {
   ERROR: {
     code: 1,
-    msg: 'failed'
+    msg: 'failed',
   },
   SUCCESS: {
     code: 0,
-    msg: 'success'
+    msg: 'success',
   },
-  unique: function (arr) {
-      return arr.filter(function (item, index, arr) {
-        return arr.indexOf(item) === index
-      })
-  }
-}
+  unique(arr) {
+    return arr.filter(function(item, index, arr) {
+      return arr.indexOf(item) === index;
+    });
+  },
+};

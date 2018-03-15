@@ -1,169 +1,169 @@
-'use strict'
+'use strict';
 
-const Service = require('egg').Service
-const bcrypt = require('bcrypt')
+const Service = require('egg').Service;
+const bcrypt = require('bcrypt');
 const {
   ERROR,
-  SUCCESS
-} = require('../util/util')
+  SUCCESS,
+} = require('../util/util');
 class UserService extends Service {
   async create(user) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
       if (!user.username || !user.password) {
-        ctx.status = 400
+        ctx.status = 400;
         return Object.assign(ERROR, {
-          msg: `expected an object with username, password but got: ${JSON.stringify(user)}`
-        })
+          msg: `expected an object with username, password but got: ${JSON.stringify(user)}`,
+        });
       }
-      const saltRounds = 10
-      const salt = bcrypt.genSaltSync(saltRounds)
-      const hash = bcrypt.hashSync(user.password, salt)
+      const saltRounds = 10;
+      const salt = bcrypt.genSaltSync(saltRounds);
+      const hash = bcrypt.hashSync(user.password, salt);
       user = Object.assign(user, {
-        password: hash
-      })
+        password: hash,
+      });
       const userDB = await ctx.model.User.findOne({
         where: {
-          username: user.username
-        }
-      })
-      if(!userDB) {
-        const res = await this.ctx.model.User.create(user)
-        ctx.status = 201
+          username: user.username,
+        },
+      });
+      if (!userDB) {
+        const res = await this.ctx.model.User.create(user);
+        ctx.status = 201;
         return Object.assign(SUCCESS, {
-          data: res
-        })
-      } else {
-        ctx.status = 406
-        return Object.assign(ERROR, {
-          msg: 'username already exists'
-        })
+          data: res,
+        });
       }
+      ctx.status = 406;
+      return Object.assign(ERROR, {
+        msg: 'username already exists',
+      });
+
     } catch (error) {
-      throw(error)
-      ctx.throw(500)
+      ctx.status = 500;
+      throw (error);
     }
   }
 
   async del(id) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
-      const user = await ctx.model.User.findById(id)
+      const user = await ctx.model.User.findById(id);
       if (!user) {
-        ctx.status = 400
+        ctx.status = 400;
         return Object.assign(ERROR, {
-          msg: 'user not found'
-        })
-      } else {
-        user.destroy()
-        ctx.status = 200
-        return Object.assign(SUCCESS, {
-          data: user
-        })
+          msg: 'user not found',
+        });
       }
+      user.destroy();
+      ctx.status = 200;
+      return Object.assign(SUCCESS, {
+        data: user,
+      });
+
     } catch (error) {
-      ctx.throw(500)
+      ctx.throw(500);
     }
   }
 
   async update({ id, user }) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
-      const userDB = await ctx.model.User.findById(id)
+      const userDB = await ctx.model.User.findById(id);
       if (!userDB) {
-        ctx.status = 400
+        ctx.status = 400;
         return Object.assign(ERROR, {
-          msg: 'user not found'
-        })
-      } else {
-        const saltRounds = 10
-        const salt = bcrypt.genSaltSync(saltRounds)
-        const hash = bcrypt.hashSync(user.password, salt)
-        user = Object.assign(user, {
-          password: hash
-        })
-        const res = await userDB.update(user)
-        ctx.status = 200
-        return Object.assign(SUCCESS, {
-          data: res
-        })
+          msg: 'user not found',
+        });
       }
+      const saltRounds = 10;
+      const salt = bcrypt.genSaltSync(saltRounds);
+      const hash = bcrypt.hashSync(user.password, salt);
+      user = Object.assign(user, {
+        password: hash,
+      });
+      const res = await userDB.update(user);
+      ctx.status = 200;
+      return Object.assign(SUCCESS, {
+        data: res,
+      });
+
     } catch (error) {
-      ctx.throw(500)
+      ctx.throw(500);
     }
   }
 
   async login({ username, password }) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
       const user = await ctx.model.User.findOne({
         where: {
           username,
-        }
-      })
+        },
+      });
       if (!user) {
-        ctx.status = 401
+        ctx.status = 401;
         return Object.assign(ERROR, {
-          msg: 'username is error'
-        })
+          msg: 'username is error',
+        });
       }
       if (await bcrypt.compare(password, user.password)) {
-        ctx.status = 200
-        const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(user.password, salt)
+        ctx.status = 200;
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(user.password, salt);
         ctx.cookies.set('auth', hash, {
-          maxAge: 3600
-        })
+          maxAge: 3600,
+        });
         return Object.assign(SUCCESS, {
           data: Object.assign(user, {
-            password: ''
-          })
-        })
-      } else {
-        ctx.status = 401
-        return Object.assign(ERROR, {
-          msg: 'password is error'
-        })
+            password: '',
+          }),
+        });
       }
+      ctx.status = 401;
+      return Object.assign(ERROR, {
+        msg: 'password is error',
+      });
+
     } catch (error) {
-      throw(error)
+      throw (error);
     }
   }
 
   async find(id) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
       const user = await ctx.model.User.findById(id, {
         include: [{
           model: ctx.model.Authority,
-          attributes: ['id', 'name']
-        }]
-      })
+          attributes: [ 'id', 'name' ],
+        }],
+      });
       if (!user) {
-        ctx.status = 401
+        ctx.status = 401;
         return Object.assign(ERROR, {
-          msg: 'user not found'
-        })
-      } else {
-        ctx.status = 200
-        return Object.assign(SUCCESS, {
-          data: user
-        })
+          msg: 'user not found',
+        });
       }
+      ctx.status = 200;
+      return Object.assign(SUCCESS, {
+        data: user,
+      });
+
     } catch (error) {
-      throw(500)
+      throw (500);
     }
   }
 }
 
-module.exports = UserService
+module.exports = UserService;

@@ -1,34 +1,33 @@
-'use strict'
+'use strict';
 
 module.exports = app => {
   const {
     INTEGER,
     STRING,
-    TEXT,
-    DATE
-  } = app.Sequelize
+    DATE,
+  } = app.Sequelize;
 
   const Comment = app.model.define('comment', {
     id: {
       type: INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     content: {
       type: STRING,
       validate: {
         min: 2,
-        max: 500
-      }
+        max: 500,
+      },
     },
     created_at: DATE,
-    updated_at: DATE
-  })
+    updated_at: DATE,
+  });
 
-  Comment.associate = function () {
-    app.model.Comment.belongsTo(app.model.User)
-    app.model.Comment.belongsTo(app.model.Blog)
-  }
+  Comment.associate = function() {
+    app.model.Comment.belongsTo(app.model.User);
+    app.model.Comment.belongsTo(app.model.Blog);
+  };
 
-  return Comment
-}
+  return Comment;
+};
