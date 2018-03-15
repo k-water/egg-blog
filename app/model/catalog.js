@@ -26,6 +26,7 @@ module.exports = app => {
 
   Catalog.associate = function() {
     app.model.Catalog.belongsTo(app.model.User)
+    app.model.Catalog.hasMany(app.model.Blog)
   }
 
   return Catalog

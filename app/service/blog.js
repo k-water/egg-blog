@@ -14,7 +14,7 @@ class BlogService extends Service {
         data: res
       }, SUCCESS)
     } catch (error) {
-      throw(error)
+      throw (error)
       return ERROR
     }
   }
@@ -55,6 +55,9 @@ class BlogService extends Service {
       }, {
         model: this.ctx.model.Comment,
         as: 'comment'
+      }, {
+        model: this.ctx.model.Catalog,
+        as: 'catalog'
       }]
     }))
     return Object.assign(SUCCESS, {
@@ -114,6 +117,9 @@ class BlogService extends Service {
       }, {
         model: this.ctx.model.Comment,
         as: 'comment'
+      }, {
+        model: this.ctx.model.Catalog,
+        as: 'catalog'
       }]
     })
     blog.set('readSize', blog.get('readSize') + 1)
@@ -141,6 +147,9 @@ class BlogService extends Service {
           model: this.ctx.model.Authority,
           attributes: ['id', 'name']
         }]
+      }, {
+        model: this.ctx.model.Catalog,
+        as: 'catalog'
       }]
     })
     if (!blog) {
@@ -164,7 +173,7 @@ class BlogService extends Service {
       })
       let arrTag = new Array()
       res.rows.map((item) => {
-       return arrTag.push(item['tags'])
+        return arrTag.push(item['tags'])
       })
       const tags = unique(arrTag.join(',').split(','))
       return Object.assign(SUCCESS, {
@@ -172,7 +181,7 @@ class BlogService extends Service {
       })
     } catch (error) {
       ctx.status = 500
-      throw(500)
+      throw (500)
     }
   }
 }
