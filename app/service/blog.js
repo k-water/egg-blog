@@ -53,9 +53,6 @@ class BlogService extends Service {
           attributes: ['id', 'name']
         }]
       }, {
-        model: this.ctx.model.Comment,
-        as: 'comment'
-      }, {
         model: this.ctx.model.Catalog,
         as: 'catalog'
       }]
@@ -116,10 +113,20 @@ class BlogService extends Service {
         }]
       }, {
         model: this.ctx.model.Comment,
-        as: 'comment'
+        as: 'comment',
+        attributes: ['id', 'content', 'created_at', 'updated_at'],
+        include: [{
+          model: this.ctx.model.User,
+          attributes: ['username']
+        }]
       }, {
         model: this.ctx.model.Catalog,
-        as: 'catalog'
+        as: 'catalog',
+        attributes: ['id', 'name', 'created_at', 'updated_at'],
+        include: [{
+          model: this.ctx.model.User,
+          attributes: ['username']
+        }]
       }]
     })
     blog.set('readSize', blog.get('readSize') + 1)
