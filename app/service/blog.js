@@ -200,6 +200,37 @@ class BlogService extends Service {
       throw (500);
     }
   }
+
+  async archive(year) {
+    const {
+      ctx,
+    } = this;
+    const {
+      Op,
+    } = this.app.Sequelize;
+    try {
+      if (!year) {
+        return Object.assign(ERROR, {
+          msg: `expected an param with year, password but got null`,
+        });
+      } else {
+        const blogs = await ctx.model.Blog.findAndCountAll({
+          where: {
+            created_at: {
+              [Op.between]: [new Date(`${year}-1-1`), new Date(`${year}-12-31 23:59`)]
+            }
+          }
+        })
+        return Object.assign(SUCCESS, {
+          data: blogs,
+          year
+        })
+      }
+    } catch (error) {
+      ctx.status = 500
+      throw(error)
+    }
+  }
 }
 
 module.exports = BlogService;

@@ -72,6 +72,14 @@ class BlogController extends Controller {
     } = this;
     ctx.body = await ctx.service.blog.getTags();
   }
+
+  async archive() {
+    const {
+      ctx
+    } = this
+    const year = ctx.query.year
+    ctx.body = await ctx.service.blog.archive(year)
+  }
 }
 
 module.exports = BlogController;

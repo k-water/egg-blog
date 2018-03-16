@@ -8,4 +8,5 @@ module.exports = app => {
   app.get('/api/tags', 'blog.tags');
   app.del('/api/users/:user_id/blog/:id', 'blog.destroy');
   app.put('/api/users/:user_id/blog/:id', 'blog.update');
+  app.get('/api/archive', 'blog.archive')
 };
