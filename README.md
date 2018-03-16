@@ -20,6 +20,12 @@ mysql的账号密码改为自己的
 
 #4
 npm run dev
+
+#5 单元测试
+npm test
+
+#6 本地测试
+npm run test-local
 ```
 ### 流程
 
