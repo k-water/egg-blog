@@ -8,4 +8,5 @@ module.exports = app => {
   require('./router/user')(app);
   require('./router/comment')(app);
   require('./router/catalog')(app);
+  require('./router/collect')(app);
 };
