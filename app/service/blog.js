@@ -28,13 +28,14 @@ class BlogService extends Service {
     order_by = 'created_at',
     order = 'DESC',
     tags = '',
+    catalog_id = '',
   }) {
     const {
       Op,
     } = this.app.Sequelize;
     const options = {
       offset: parseInt(offset),
-      limit,
+      limit: parseInt(limit),
       order: [
         [ order_by, order.toUpperCase() ],
       ],
@@ -44,6 +45,11 @@ class BlogService extends Service {
         tags: {
           [Op.like]: `%${tags}%`,
         },
+      };
+    }
+    if (catalog_id) {
+      options.where = {
+        catalog_id: parseInt(catalog_id, 10),
       };
     }
     const res = await this.ctx.model.Blog.findAndCountAll(Object.assign(options, {

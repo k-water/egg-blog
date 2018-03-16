@@ -119,8 +119,23 @@ class UserService extends Service {
         ctx.status = 200;
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(user.password, salt);
-        ctx.cookies.set('auth', hash, {
-          maxAge: 3600,
+        ctx.cookies.set('token', hash, {
+          httpOnly: false,
+          signed: false,
+          maxAge: 24 * 3600 * 1000,
+          path: '/',
+        });
+        ctx.cookies.set('user_id', user.id, {
+          httpOnly: false,
+          signed: false,
+          maxAge: 24 * 3600 * 1000,
+          path: '/',
+        });
+        ctx.cookies.set('username', user.username, {
+          httpOnly: false,
+          signed: false,
+          maxAge: 24 * 3600 * 1000,
+          path: '/',
         });
         return Object.assign(SUCCESS, {
           data: Object.assign(user, {
