@@ -75,10 +75,10 @@ class BlogController extends Controller {
 
   async archive() {
     const {
-      ctx
-    } = this
-    const year = ctx.query.year
-    ctx.body = await ctx.service.blog.archive(year)
+      ctx,
+    } = this;
+    const year = ctx.query.year;
+    ctx.body = await ctx.service.blog.archive(year);
   }
 }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const Service = require('egg').Service;
-const bcrypt = require('bcrypt');
+const md5 = require('js-md5')
 const {
   ERROR,
   SUCCESS,
@@ -18,11 +18,9 @@ class UserService extends Service {
           msg: `expected an object with username, password but got: ${JSON.stringify(user)}`,
         });
       }
-      const saltRounds = 10;
-      const salt = bcrypt.genSaltSync(saltRounds);
-      const hash = bcrypt.hashSync(user.password, salt);
+      const md5Passwd = md5(user.password)
       user = Object.assign(user, {
-        password: hash,
+        password: md5Passwd,
       });
       const userDB = await ctx.model.User.findOne({
         where: {
@@ -82,11 +80,9 @@ class UserService extends Service {
           msg: 'user not found',
         });
       }
-      const saltRounds = 10;
-      const salt = bcrypt.genSaltSync(saltRounds);
-      const hash = bcrypt.hashSync(user.password, salt);
+      const md5Passwd = md5(user.password)
       user = Object.assign(user, {
-        password: hash,
+        password: md5Passwd,
       });
       const res = await userDB.update(user);
       ctx.status = 200;
@@ -114,10 +110,9 @@ class UserService extends Service {
           msg: 'username is error',
         });
       }
-      if (await bcrypt.compare(password, user.password)) {
+      if (md5(password) === user.password) {
         ctx.status = 200;
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(user.password, salt);
+        const hash = md5.hex(password)
         ctx.cookies.set('token', hash, {
           httpOnly: false,
           signed: false,
@@ -141,13 +136,14 @@ class UserService extends Service {
             password: '',
           }),
         });
-      } else {
-        return Object.assign(ERROR, {
-          msg: 'password is error',
-        });
       }
+      return Object.assign(ERROR, {
+        msg: 'password is error',
+      });
+
 
     } catch (error) {
+      ctx.status = 500;
       throw (error);
     }
   }

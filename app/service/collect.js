@@ -8,17 +8,17 @@ const {
 class CollectService extends Service {
   async create(collect) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
-      const created = await ctx.model.Collect.create(collect)
-      ctx.status = 201
+      const created = await ctx.model.Collect.create(collect);
+      ctx.status = 201;
       return Object.assign(SUCCESS, {
-        data: created
-      })
+        data: created,
+      });
     } catch (error) {
-      ctx.status = 500
-      throw(error)
+      ctx.status = 500;
+      throw (error);
     }
   }
 
@@ -26,11 +26,11 @@ class CollectService extends Service {
     offset = 0,
     limit = 10,
     order_by = 'created_at',
-    order = 'DESC'
+    order = 'DESC',
   }) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     const options = {
       offset: parseInt(offset),
       limit: parseInt(limit),
@@ -39,79 +39,80 @@ class CollectService extends Service {
       ],
     };
     try {
-      const res = await ctx.model.Collect.findAndCountAll(options)
+      const res = await ctx.model.Collect.findAndCountAll(options);
       return Object.assign(SUCCESS, {
         data: res,
       });
     } catch (error) {
-      ctx.status = 500
-      throw(error)
+      ctx.status = 500;
+      throw (error);
     }
   }
 
   async del(id) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
-      const collect = await ctx.model.Collect.findById(id)
+      const collect = await ctx.model.Collect.findById(id);
       if (!collect) {
         return Object.assign(ERROR, {
-          msg: 'collect not found'
-        })
-      } else {
-        collect.destroy()
-        return Object.assign(SUCCESS, {
-          data: collect
-        })
+          msg: 'collect not found',
+        });
       }
+      collect.destroy();
+      return Object.assign(SUCCESS, {
+        data: collect,
+      });
+
     } catch (error) {
-      ctx.status = 500
-      throw(error)
+      ctx.status = 500;
+      throw (error);
     }
   }
   async find(id) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
-      const collect = await ctx.model.Collect.findById(id)
+      const collect = await ctx.model.Collect.findById(id);
       if (!collect) {
         return Object.assign(ERROR, {
-          msg: 'collect not found'
-        })
-      } else {
-        return Object.assign(SUCCESS, {
-          data: collect
-        })
+          msg: 'collect not found',
+        });
       }
+      return Object.assign(SUCCESS, {
+        data: collect,
+      });
+
     } catch (error) {
-      ctx.status = 500
-      throw(error)
+      ctx.status = 500;
+      throw (error);
     }
   }
 
   async update({
     id,
-    updates
+    updates,
   }) {
     const {
-      ctx
-    } = this
+      ctx,
+    } = this;
     try {
-      const collect = await ctx.model.Collect.findById(id)
+      const collect = await ctx.model.Collect.findById(id);
       if (!collect) {
         return Object.assign(ERROR, {
-          msg: 'collect not found'
-        })
-      } else {
-       const res = await collect.update(updates)
-       return Object.assign(SUCCESS, {
-          data: res
-        })
+          msg: 'collect not found',
+        });
       }
+      const res = await collect.update(updates);
+      return Object.assign(SUCCESS, {
+        data: res,
+      });
+
     } catch (error) {
-      
+      ctx.status = 500;
+      throw (error);
     }
   }
 }

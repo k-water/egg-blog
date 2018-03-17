@@ -30,7 +30,13 @@ module.exports = appInfo => {
   };
 
   config.cors = {
-    credentials: true
+    credentials: true,
+  };
+
+  config.alinode = {
+    enable: true,
+    appid: 'your appid',
+    secret: 'your secret',
   };
 
   return config;

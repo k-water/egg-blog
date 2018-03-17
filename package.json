@@ -4,12 +4,12 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "bcrypt": "^1.0.3",
     "egg": "^2.2.1",
     "egg-alinode": "^2.0.1",
     "egg-cors": "^2.0.0",
     "egg-scripts": "^2.5.0",
     "egg-sequelize": "^3.1.2",
+    "js-md5": "^0.7.3",
     "mysql2": "^1.5.2"
   },
   "devDependencies": {

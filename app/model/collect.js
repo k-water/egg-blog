@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = app => {
   const {
@@ -18,7 +18,7 @@ module.exports = app => {
     title: STRING,
     created_at: DATE,
     updated_at: DATE,
-  })
+  });
 
-  return Collect
-}
+  return Collect;
+};
