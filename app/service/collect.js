@@ -48,6 +48,72 @@ class CollectService extends Service {
       throw(error)
     }
   }
+
+  async del(id) {
+    const {
+      ctx
+    } = this
+    try {
+      const collect = await ctx.model.Collect.findById(id)
+      if (!collect) {
+        return Object.assign(ERROR, {
+          msg: 'collect not found'
+        })
+      } else {
+        collect.destroy()
+        return Object.assign(SUCCESS, {
+          data: collect
+        })
+      }
+    } catch (error) {
+      ctx.status = 500
+      throw(error)
+    }
+  }
+  async find(id) {
+    const {
+      ctx
+    } = this
+    try {
+      const collect = await ctx.model.Collect.findById(id)
+      if (!collect) {
+        return Object.assign(ERROR, {
+          msg: 'collect not found'
+        })
+      } else {
+        return Object.assign(SUCCESS, {
+          data: collect
+        })
+      }
+    } catch (error) {
+      ctx.status = 500
+      throw(error)
+    }
+  }
+
+  async update({
+    id,
+    updates
+  }) {
+    const {
+      ctx
+    } = this
+    try {
+      const collect = await ctx.model.Collect.findById(id)
+      if (!collect) {
+        return Object.assign(ERROR, {
+          msg: 'collect not found'
+        })
+      } else {
+       const res = await collect.update(updates)
+       return Object.assign(SUCCESS, {
+          data: res
+        })
+      }
+    } catch (error) {
+      
+    }
+  }
 }
 
 module.exports = CollectService;
