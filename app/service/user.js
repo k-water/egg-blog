@@ -110,7 +110,6 @@ class UserService extends Service {
         },
       });
       if (!user) {
-        ctx.status = 401;
         return Object.assign(ERROR, {
           msg: 'username is error',
         });
@@ -122,19 +121,19 @@ class UserService extends Service {
         ctx.cookies.set('token', hash, {
           httpOnly: false,
           signed: false,
-          maxAge: 24 * 3600 * 1000,
+          maxAge: 3600 * 1000,
           path: '/',
         });
         ctx.cookies.set('user_id', user.id, {
           httpOnly: false,
           signed: false,
-          maxAge: 24 * 3600 * 1000,
+          maxAge: 3600 * 1000,
           path: '/',
         });
         ctx.cookies.set('username', user.username, {
           httpOnly: false,
           signed: false,
-          maxAge: 24 * 3600 * 1000,
+          maxAge: 3600 * 1000,
           path: '/',
         });
         return Object.assign(SUCCESS, {
@@ -142,11 +141,11 @@ class UserService extends Service {
             password: '',
           }),
         });
+      } else {
+        return Object.assign(ERROR, {
+          msg: 'password is error',
+        });
       }
-      ctx.status = 401;
-      return Object.assign(ERROR, {
-        msg: 'password is error',
-      });
 
     } catch (error) {
       throw (error);

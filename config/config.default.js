@@ -26,6 +26,11 @@ module.exports = appInfo => {
     csrf: {
       enable: false,
     },
+    domainWhiteList: [ 'http://119.29.151.195' ],
+  };
+
+  config.cors = {
+    credentials: true
   };
 
   return config;

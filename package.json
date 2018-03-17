@@ -7,6 +7,7 @@
     "bcrypt": "^1.0.3",
     "egg": "^2.2.1",
     "egg-alinode": "^2.0.1",
+    "egg-cors": "^2.0.0",
     "egg-scripts": "^2.5.0",
     "egg-sequelize": "^3.1.2",
     "mysql2": "^1.5.2"
@@ -44,8 +45,8 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/k-water/egg-blog.git"
   },
-  "author": "",
+  "author": "k-water",
   "license": "MIT"
 }
