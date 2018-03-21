@@ -15,10 +15,6 @@ module.exports = app => {
     },
     content: {
       type: STRING,
-      validate: {
-        min: 2,
-        max: 500,
-      },
     },
     created_at: DATE,
     updated_at: DATE,

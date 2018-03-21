@@ -102,7 +102,7 @@ class UserService extends Service {
     try {
       const user = await ctx.model.User.findOne({
         where: {
-          username,
+          username: username.toString()
         },
       });
       if (!user) {
@@ -120,12 +120,6 @@ class UserService extends Service {
           path: '/',
         });
         ctx.cookies.set('user_id', user.id, {
-          httpOnly: false,
-          signed: false,
-          maxAge: 3600 * 1000,
-          path: '/',
-        });
-        ctx.cookies.set('username', user.username, {
           httpOnly: false,
           signed: false,
           maxAge: 3600 * 1000,
