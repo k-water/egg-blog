@@ -1,5 +1,5 @@
 'use strict';
-
+const sqlConfig = require('../config');
 module.exports = appInfo => {
   const config = exports = {};
 
@@ -17,8 +17,8 @@ module.exports = appInfo => {
     database: 'egg_db',
     host: 'localhost',
     port: '3306',
-    username: 'your username',
-    password: 'your password',
+    username: sqlConfig.localSql.username,
+    password: sqlConfig.localSql.password,
     timezone: '+08:00',
   };
 
